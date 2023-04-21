@@ -1,4 +1,4 @@
-from math import inf
+import numpy as np
 
 class PBQPGraph:
     def __init__(self):
@@ -18,19 +18,21 @@ class PBQPGraph:
         }
         return data
     
-    def create_basic_cost_array(regCost, spillCost):
-        array = regCost
+    def create_cost_array(regCost, spillCost):
+        array = regCost.copy()
         array.append(spillCost)
         return array
 
-    def create_basic_cost_matrix(array1, array2):
+    def create_cost_matrix(array1, array2):
         n = len(array2)
-        matrix = [array1] * n
+        matrix = []
         for i in range(n):
+            aux = []
             for j in range(n):
                 if i == j and i != n - 1:
-                    matrix[i][j] = inf
+                   aux.append("Infinity")
                 else:
-                    matrix[i][j] += array2[j]
+                    aux.append(array1[i] + array2[j])
+            matrix.append(aux)
         return matrix
             

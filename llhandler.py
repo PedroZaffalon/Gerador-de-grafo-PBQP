@@ -63,7 +63,7 @@ class LLHandler:
         graph = PBQPGraph()
         for rName in vRegisters:
             node = vRegisters[rName]
-            array = PBQPGraph.create_basic_cost_array(regCostArray, node[2])
+            array = PBQPGraph.create_cost_array(regCostArray, node[2])
             graph.add_node(rName, array)
         for rName1 in vRegisters:
             for rName2 in vRegisters:
@@ -71,6 +71,6 @@ class LLHandler:
                     node1 = vRegisters[rName1]
                     node2 = vRegisters[rName2]
                     if node1[0] <= node2[0] <= node1[1] or node1[0] <= node2[1] <= node1[1] or node2[0] <= node1[0] <= node2[1] or node2[0] <= node1[1] <= node2[1]:
-                        matrix = PBQPGraph.create_basic_cost_matrix(graph.nodes[rName1], graph.nodes[rName2])
+                        matrix = PBQPGraph.create_cost_matrix(graph.nodes[rName1], graph.nodes[rName2])
                         graph.add_edge(rName1, rName2, matrix)
         return graph

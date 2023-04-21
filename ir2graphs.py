@@ -12,7 +12,7 @@ if __name__ == '__main__':
         raise SystemExit(2)
 
     try:
-        file = open(args_count[1])
+        file = open(sys.argv[1], "r")
     except:
         print("The file doesn't exist")
         raise SystemExit(1)
@@ -22,12 +22,36 @@ if __name__ == '__main__':
     functions = LLHandler.read_llvm_ir_file(file)
     for function_name in functions:
         function_code = functions[function_name]
-        vRegisters = LLHandler.analyze_register(function_code)
+        vRegisters = LLHandler.analyze_registers(function_code)
         graph = LLHandler.create_graph(vRegisters, [0]*16)
+
         graphs[function_name] = graph.as_dict()
 
-    with open(args_count[2], "w") as f:
-        json.dump(graphs, f, indent=4)
+    with open(sys.argv[2], "w") as f:
+        f.write("{\n")
+        for function_name in graphs:
+            f.write("\"" + function_name + "\" :\n")
+            
+            nodes = graphs[function_name]["nodes"]
+            f.write("\t{\n\t\"nodes\" :\n\t\t{\n")
+            for node_name in nodes:
+                f.write("\t\t\"" + node_name + "\": " + str(nodes[node_name]) + ",\n")
+            f.write("\t\t},\n")
+            edges = graphs[function_name]["edges"]
+            f.write("\t\"edges\" :\n\t\t{\n")
+            for edge in edges:
+                f.write("\t\t\"node 1\" : \"" + edge[0] +  "\",\n")
+                f.write("\t\t\"node 2\" : \"" + edge[1] +  "\",\n")
+                f.write("\t\t\"cost matrix\" :\n")
+                f.write("\t\t\t[\n")
+                for arr in edge[2]:
+                    f.write("\t\t\t" + json.dumps(arr) + ",\n")
+                f.write("\t\t\t],\n")
+            f.write("\t\t},\n")
+            f.write("\t},\n")
+
+        f.write('}\n')
+
     
 
         
