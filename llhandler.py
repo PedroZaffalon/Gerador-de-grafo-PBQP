@@ -46,6 +46,8 @@ class LLHandler:
             used_registers = set()
             for word in line.split():
                 if word.startswith('%'):
+                    if word[-1] in [',', ')', ']']:
+                        word = word[:-1]
                     used_registers.add(word)
 
             # Atualizar as informações dos registradores utilizados na linha de código
