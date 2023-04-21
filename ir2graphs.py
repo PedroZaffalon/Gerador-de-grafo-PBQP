@@ -56,7 +56,7 @@ if __name__ == '__main__':
                     f.write(",\n")
                 else:
                     flag3 = True
-                f.write("\t\t{\t\t\"node 1\" : \"" + edge[0] +  "\",\n")
+                f.write("\t\t{\"node 1\" : \"" + edge[0] +  "\",\n")
                 f.write("\t\t\"node 2\" : \"" + edge[1] +  "\",\n")
                 f.write("\t\t\"cost matrix\" :\n")
                 f.write("\t\t\t[\n")
