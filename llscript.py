@@ -4,7 +4,7 @@ import sys
 
 def generatell(dir_path, output_dir):
     # Primeiro, definimos a linha de comando que será executada para cada arquivo .c
-    c_command = "clang -S -emit-llvm {} -o {}.ll"
+    c_command = "clang -Xclang -disable-O0-optnone -S -emit-llvm {} -o {}.ll"
 
     # Em seguida, iteramos sobre todos os arquivos .c no diretório
     for file_name in os.listdir(dir_path):
@@ -18,7 +18,7 @@ def generatell(dir_path, output_dir):
         os.makedirs(output_dir)
 
     # Definimos a linha de comando para gerar os arquivos .ll de saída
-    ll_command = "opt -mem2reg {}.ll -o {}/{}.bc"
+    ll_command = "opt -S -mem2reg {}.ll -o {}/{}.ll"
 
     # Iteramos sobre todos os arquivos .ll gerados pelo comando anterior
     for file_name in os.listdir(dir_path):
