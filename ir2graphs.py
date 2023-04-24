@@ -6,8 +6,8 @@ import os
 def ir2graphs(inputfile, outputfile, edgeflag):
 
     graphs = {}
-
-    functions = LLHandler.read_llvm_ir_file(inputfile)
+    file = open(inputfile, "r")
+    functions = LLHandler.read_llvm_ir_file(file)
     for function_name in functions:
         function_code = functions[function_name]
         vRegisters = LLHandler.analyze_registers(function_code)
@@ -45,15 +45,15 @@ def ir2graphs(inputfile, outputfile, edgeflag):
                 else:
                     flag3 = True
                 f.write("\t\t{\"node 1\" : \"" + edge[0] +  "\",\n")
-                f.write("\t\t\"node 2\" : \"" + edge[1] +  "\",\n")
+                f.write("\t\t\"node 2\" : \"" + edge[1] +  "\"")
                 if edgeflag:
-                    f.write("\t\t\"cost matrix\" :\n")
+                    f.write(",\n\t\t\"cost matrix\" :\n")
                     f.write("\t\t\t[\n")
                     for arr in edge[2][:-1]:
                         f.write("\t\t\t" + json.dumps(arr) + ",\n")
                     f.write("\t\t\t" + json.dumps(edge[2][-1]) + "\n")
-                    f.write("\t\t\t]\n")
-                f.write("\t\t}\n")
+                    f.write("\t\t\t]")
+                f.write("\n\t\t}")
             f.write("\t\t]\n")
             f.write("\t}")
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     if args_count == 2:
         dir_path = os.getcwd()
         output_dir = dir_path
-        edgeflag = bool(sys.argv[1])
+        edgeflag = bool(int(sys.argv[1]))
     elif args_count == 3:
         dir_path = os.getcwd()
         output_dir = sys.argv[1]
@@ -83,7 +83,8 @@ if __name__ == '__main__':
     
     for input_file_name in os.listdir(dir_path):
         if input_file_name.endswith(".ll"):
-            output_file_name = os.path.join(output_dir, input_file_name)
+            aux = input_file_name[:-3] + ".json"
+            output_file_name = os.path.join(output_dir, aux)
             ir2graphs(input_file_name, output_file_name, edgeflag)
         
     
