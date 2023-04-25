@@ -35,7 +35,7 @@ if __name__ == '__main__':
     elif args_count == 2:
         dir_path = os.getcwd()
         output_dir = sys.argv[2]
-    elif args_count == 4:
+    elif args_count == 3:
         dir_path = sys.argv[1]
         output_dir = sys.argv[2]
     else:
