@@ -69,11 +69,11 @@ if __name__ == '__main__':
     elif args_count == 3:
         dir_path = os.getcwd()
         output_dir = sys.argv[1]
-        edgeflag = bool(sys.argv[2])
+        edgeflag = bool(int(sys.argv[2]))
     elif args_count == 4:
         dir_path = sys.argv[1]
         output_dir = sys.argv[2]
-        edgeflag = bool(sys.argv[3])
+        edgeflag = bool(int(sys.argv[3]))
     else:
         print("Error\n")
         quit(1)
@@ -81,9 +81,10 @@ if __name__ == '__main__':
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    for input_file_name in os.listdir(dir_path):
-        if input_file_name.endswith(".ll"):
-            aux = input_file_name[:-3] + ".json"
+    for file_name in os.listdir(dir_path):
+        if file_name.endswith(".ll"):
+            aux = file_name[:-3] + ".json"
+            input_file_name = os.path.join(dir_path, file_name)
             output_file_name = os.path.join(output_dir, aux)
             ir2graphs(input_file_name, output_file_name, edgeflag)
         
