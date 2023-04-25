@@ -16,15 +16,15 @@ class LLHandler:
             # Verificar se a linha indica o início de uma nova função
             if line.startswith('define'):
                 # Obter o nome da função a partir da linha de código
-                function_name = line.split()[2]
-
+                function_name = line.split()[2].split('(')[0]
+                
                 # Inicializar um novo array de strings para a função
                 function_code = []
 
                 # Adicionar cada linha de código subsequente da função até encontrar o final da função
-                j = i + 1
+                j = i
                 while j < len(lines) and not lines[j].startswith('}'):
-                    function_code.append(lines[j].strip())
+                    function_code.append(lines[j])
                     j += 1
 
                 # Armazenar o array de strings da função no dicionário
