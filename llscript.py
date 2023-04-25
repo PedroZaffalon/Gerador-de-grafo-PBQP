@@ -10,7 +10,8 @@ def generatell(dir_path, output_dir):
     for file_name in os.listdir(dir_path):
         if file_name.endswith(".c"):
             # Executamos a linha de comando para cada arquivo .c
-            command = c_command.format(file_name, file_name[:-2])
+            input_file_name = os.path.join(dir_path, file_name)
+            command = c_command.format(input_file_name, input_file_name[:-2])
             subprocess.run(command, shell=True)
     
     # Certificamo-nos de que o diretório de saída existe; se não, criamos um
@@ -18,13 +19,15 @@ def generatell(dir_path, output_dir):
         os.makedirs(output_dir)
 
     # Definimos a linha de comando para gerar os arquivos .ll de saída
-    ll_command = "opt -S -mem2reg {}.ll -o {}/{}.ll"
+    ll_command = "opt -S -mem2reg {}.ll -o {}.ll"
 
     # Iteramos sobre todos os arquivos .ll gerados pelo comando anterior
     for file_name in os.listdir(dir_path):
         if file_name.endswith(".ll"):
             # Executamos a linha de comando para cada arquivo .ll
-            command = ll_command.format(file_name[:-3], output_dir, file_name[:-3])
+            input_file_name = os.path.join(dir_path, file_name[:-3])
+            output_file_name = os.path.join(output_dir, file_name[:-3])
+            command = ll_command.format(input_file_name, output_file_name)
             subprocess.run(command, shell=True)
 
 if __name__ == '__main__':
