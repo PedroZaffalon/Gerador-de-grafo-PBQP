@@ -1,9 +1,8 @@
 from llhandler import LLHandler
 import sys
-import json
 import os
 
-def ir2graphs(inputfile, outputfile, edgeflag):
+def ir2graphs(inputfile, outputfile, arrayflag, edgeflag):
 
     graphs = {}
     file = open(inputfile, "r")
@@ -11,9 +10,9 @@ def ir2graphs(inputfile, outputfile, edgeflag):
     for function_name in functions:
         function_code = functions[function_name]
         vRegisters = LLHandler.analyze_registers(function_code)
-        graph = LLHandler.create_graph(vRegisters, [0]*16)
+        graph = LLHandler.create_graph(vRegisters, [0]*16, None)
         print(function_name + " : " + str(len(graph.nodes)) + " nodes and " + str(len(graph.edges)) + " edges\n")
-        graphs[function_name] = graph.as_dict()
+        graphs[function_name] = graph
 
     with open(outputfile, "w") as f:
         f.write("{\n")
@@ -23,41 +22,9 @@ def ir2graphs(inputfile, outputfile, edgeflag):
                 f.write(",\n")
             else:
                 flag = True
-            f.write("\"" + function_name + "\" :\n")
-            
-            nodes = graphs[function_name]["nodes"]
-            f.write("\t{\n\t\"nodes\" :\n\t\t{\n")
-            flag2 = False
-            for node_name in nodes:
-                if flag2:
-                    f.write(",\n")
-                else:
-                    flag2 = True
-                f.write("\t\t\"" + node_name + "\": " + str(nodes[node_name]))
-            f.write("\n\t\t},\n")
-            edges = graphs[function_name]["edges"]
-            f.write("\t\"edges\" :\n\t\t[\n")
-
-            flag3 = False
-            for edge in edges:
-                if flag3:
-                    f.write(",\n")
-                else:
-                    flag3 = True
-                f.write("\t\t{\"node 1\" : \"" + edge[0] +  "\",\n")
-                f.write("\t\t\"node 2\" : \"" + edge[1] +  "\"")
-                if edgeflag:
-                    f.write(",\n\t\t\"cost matrix\" :\n")
-                    f.write("\t\t\t[\n")
-                    for arr in edge[2][:-1]:
-                        f.write("\t\t\t" + json.dumps(arr) + ",\n")
-                    f.write("\t\t\t" + json.dumps(edge[2][-1]) + "\n")
-                    f.write("\t\t\t]")
-                f.write("\n\t\t}")
-            f.write("\t\t]\n")
-            f.write("\t}")
-
-        f.write('\n}\n')
+            f.write("\t\"" + function_name + "\" : ")
+            f.write(graphs[function_name].as_json(arrayflag, edgeflag, 1)) 
+        f.write('\n}')
 
     
 if __name__ == '__main__':
@@ -86,6 +53,6 @@ if __name__ == '__main__':
             aux = file_name[:-3] + ".json"
             input_file_name = os.path.join(dir_path, file_name)
             output_file_name = os.path.join(output_dir, aux)
-            ir2graphs(input_file_name, output_file_name, edgeflag)
+            ir2graphs(input_file_name, output_file_name, 1, edgeflag)
         
     
