@@ -11,6 +11,7 @@
 - `--dir/ -d` - Path to directory with .ll input files.
 - `--output/ -o` - Path to output directory.
 - `--clean/ -c` - Remove temporary .ll files.
+- `--name/ -n'` - Name for output files. Default is original files names.
 
 ---
 

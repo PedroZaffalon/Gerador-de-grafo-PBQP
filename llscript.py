@@ -6,9 +6,9 @@ import click
 @click.option('--dir', '-d', default="", help='Path to directory with .ll input files.')
 @click.option('--output', '-o', default="", help='Path to output directory.')
 @click.option('--clean', '-c', is_flag=True, default=True, help='Remove temporary .ll files.')
+@click.option('--name', '-n', default="", help='Name for output files. Default is original files names.')
 
-
-def cli(dir, output, clean):
+def cli(dir, output, clean, name):
 
     """Compile c/c++ codes on directory and generates .ll files with mem2reg option"""
 
@@ -22,12 +22,19 @@ def cli(dir, output, clean):
     c_command = "clang -Xclang -disable-O0-optnone -S -emit-llvm {} -o {}.ll"
 
     # Em seguida, iteramos sobre todos os arquivos .c no diretório
+    i = 1
     for file_name in os.listdir(dir):
         if file_name.endswith(".c"):
             # Executamos a linha de comando para cada arquivo .c
+            if name != "":
+                aux_name = name + "_" + str(i)
+            else:
+                aux_name = file_name.split('.')[0]
             input_file_name = os.path.join(dir, file_name)
-            command = c_command.format(input_file_name, input_file_name[:-2])
+            output_file_name = os.path.join(dir, aux_name)
+            command = c_command.format(input_file_name, output_file_name)
             subprocess.run(command, shell=True)
+            i += 1
     
     # Certificamo-nos de que o diretório de saída existe; se não, criamos um
     if not os.path.exists(output):
