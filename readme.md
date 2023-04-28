@@ -1,4 +1,4 @@
-# PBQP inteference graph generator
+# PBQP Inteference Graph Generator
 ---
 #### A python script to create PBQP graphs from c/c++ codes. The main goal is generate a dataset for machine learning models to solve register allocation
 
