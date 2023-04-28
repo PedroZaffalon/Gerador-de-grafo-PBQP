@@ -2,15 +2,17 @@ from llhandler import LLHandler
 import click
 import os
 import json
+import importlib
 
 @click.command()
 @click.option('--dir', '-d', default="", help='Path to directory with .ll input files.')
 @click.option('--output', '-o', default="", help='Path to output directory.')
+@click.option('--costfunc', '-f', default="", help='Name of python file with cost function for array/matrix generation.')
 @click.option('--regcost', '-r', default="", help='Path to .json file with the registers cost array.')
 @click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
 
-def cli(dir, output, regcost, array, matrix):
+def cli(dir, output, costfunc, regcost, array, matrix):
 
     """Generate .json files with PBQP interference graphs from .ll files with mem2reg option"""
     
@@ -19,6 +21,13 @@ def cli(dir, output, regcost, array, matrix):
     
     if output == "":
         output = dir
+
+    if costfunc == "" or not os.path.isfile(costfunc):
+        func = None
+    else:
+        nome_modulo = costfunc.split('.')[0]
+        meu_modulo = importlib.import_module(nome_modulo, package=None)
+        func = meu_modulo.costfunc
 
     if regcost == "" or not os.path.isfile(regcost):
         costArray = [0]*16

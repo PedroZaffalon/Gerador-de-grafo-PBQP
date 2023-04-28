@@ -19,6 +19,7 @@
 ##### Flags
 - `--dir/ -d` - Path to directory with .ll input files.
 - `--output/ -o` - Path to output directory.
+- `--costfunc/ -f` - Name of python file with cost function for array/matrix generation.
 - `--regcost/ -r` - Path to .json file with the registers cost array.
 - `--array/ -a` - Display cost array of nodes on .json file.
 - `--matrix/ -m` - Display cost matrix of edges on .json file.
