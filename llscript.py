@@ -5,8 +5,10 @@ import click
 @click.command()
 @click.option('--dir', '-d', default="", help='Path to directory with .ll input files.')
 @click.option('--output', '-o', default="", help='Path to output directory.')
+@click.option('--clean', '-c', is_flag=True, default=True, help='Remove temporary .ll files.')
 
-def cli(dir, output):
+
+def cli(dir, output, clean):
 
     """Compile c/c++ codes on directory and generates .ll files with mem2reg option"""
 
@@ -42,7 +44,8 @@ def cli(dir, output):
             output_file_name = os.path.join(output, file_name[:-3])
             command = ll_command.format(input_file_name, output_file_name)
             subprocess.run(command, shell=True)
-    
+            if clean:
+                os.remove(input_file_name + ".ll")
 
 if __name__ == '__main__':
     cli()

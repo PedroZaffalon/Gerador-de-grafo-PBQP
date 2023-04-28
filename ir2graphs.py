@@ -7,7 +7,7 @@ import importlib
 @click.command()
 @click.option('--dir', '-d', default="", help='Path to directory with .ll input files.')
 @click.option('--output', '-o', default="", help='Path to output directory.')
-@click.option('--costfunc', '-f', default="", help='Name of python file with cost function for array/matrix generation.')
+@click.option('--costfunc', '-f', default="", help='Name of python file with cost function for array/matrix generation. Needs to be in same directory.')
 @click.option('--regcost', '-r', default="", help='Path to .json file with the registers cost array.')
 @click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
