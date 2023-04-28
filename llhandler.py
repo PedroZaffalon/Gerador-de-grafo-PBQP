@@ -129,7 +129,7 @@ class LLHandler:
                 if rName1 != rName2:
                     node1 = vRegisters[rName1]
                     node2 = vRegisters[rName2]
-                    if node1[0] <= node2[0] <= node1[1] or node1[0] <= node2[1] <= node1[1] or node2[0] <= node1[0] <= node2[1] or node2[0] <= node1[1] <= node2[1]:
+                    if node1[0] <= node2[0] < node1[1] or node1[0] <= node2[1] <= node1[1] or node2[0] <= node1[0] < node2[1] or node2[0] <= node1[1] <= node2[1]:
                         matrix = PBQPGraph.create_cost_matrix(graph.nodes[rName1]["array"], graph.nodes[rName2]["array"], spillCostLen)
                         graph.add_edge(rName1, rName2, matrix)
         return graph
