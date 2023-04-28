@@ -1,6 +1,30 @@
 from llhandler import LLHandler
-import sys
+import click
 import os
+
+@click.command()
+@click.option('--dir', '-d', default="", help='Path to directory with .ll input files.')
+@click.option('--output', '-o', default="", help='Path to output directory.')
+@click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
+@click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
+
+def cli(dir, output, array, matrix):
+    
+    if dir == "":
+        dir = os.getcwd()
+    
+    if output == "":
+        output = dir
+
+    if not os.path.exists(output):
+        os.makedirs(output)
+    
+    for file_name in os.listdir(dir):
+        if file_name.endswith(".ll"):
+            aux = file_name[:-3] + ".json"
+            input_file_name = os.path.join(dir, file_name)
+            output_file_name = os.path.join(output, aux)
+            ir2graphs(input_file_name, output_file_name, array, matrix)
 
 def ir2graphs(inputfile, outputfile, arrayflag, edgeflag):
 
@@ -26,33 +50,6 @@ def ir2graphs(inputfile, outputfile, arrayflag, edgeflag):
             f.write(graphs[function_name].as_json(arrayflag, edgeflag, 1)) 
         f.write('\n}')
 
-    
 if __name__ == '__main__':
-    args_count = len(sys.argv)
-    if args_count == 2:
-        dir_path = os.getcwd()
-        output_dir = dir_path
-        edgeflag = bool(int(sys.argv[1]))
-    elif args_count == 3:
-        dir_path = os.getcwd()
-        output_dir = sys.argv[1]
-        edgeflag = bool(int(sys.argv[2]))
-    elif args_count == 4:
-        dir_path = sys.argv[1]
-        output_dir = sys.argv[2]
-        edgeflag = bool(int(sys.argv[3]))
-    else:
-        print("Error\n")
-        quit(1)
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    
-    for file_name in os.listdir(dir_path):
-        if file_name.endswith(".ll"):
-            aux = file_name[:-3] + ".json"
-            input_file_name = os.path.join(dir_path, file_name)
-            output_file_name = os.path.join(output_dir, aux)
-            ir2graphs(input_file_name, output_file_name, 1, edgeflag)
-        
+    cli()
     
