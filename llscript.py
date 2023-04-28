@@ -24,7 +24,7 @@ def cli(dir, output, clean, name):
     # Em seguida, iteramos sobre todos os arquivos .c no diretório
     i = 1
     for file_name in os.listdir(dir):
-        if file_name.endswith(".c"):
+        if file_name.endswith(".c") or file_name.endswith(".cpp"):
             # Executamos a linha de comando para cada arquivo .c
             if name != "":
                 aux_name = name + "_" + str(i)
