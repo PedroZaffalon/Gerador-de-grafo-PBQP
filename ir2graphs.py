@@ -9,6 +9,8 @@ import os
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
 
 def cli(dir, output, array, matrix):
+
+    """Generate .json files with PBQP interference graphs from .ll files with mem2reg option"""
     
     if dir == "":
         dir = os.getcwd()

@@ -8,6 +8,8 @@ import click
 
 def cli(dir, output):
 
+    """Compile c/c++ codes on directory and generates .ll files with mem2reg option"""
+
     if dir == "":
         dir = os.getcwd()
     
@@ -40,7 +42,6 @@ def cli(dir, output):
             output_file_name = os.path.join(output, file_name[:-3])
             command = ll_command.format(input_file_name, output_file_name)
             subprocess.run(command, shell=True)
-
     
 
 if __name__ == '__main__':
