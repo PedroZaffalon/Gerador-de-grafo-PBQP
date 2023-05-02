@@ -1,14 +1,17 @@
 import os
 import subprocess
 import click
+from subdir import percorrer_subdiretorios
 
 @click.command()
-@click.option('--dir', '-d', default="", help='Path to directory with .ll input files.')
+@click.option('--dir', '-d', default="", help='Path to root directory for .ll files search')
 @click.option('--output', '-o', default="", help='Path to output directory.')
+@click.option('--subdirectorys', '-s', is_flag=True, default=False, help='Iterate all subdirectories and search for .ll files.')
+@click.option('--keepfolders', '-k', is_flag=True, default=False, help='Keep folders structure in output directory if --subdirectorys is True.')
 @click.option('--clean', '-c', is_flag=True, default=True, help='Remove temporary .ll files.')
 @click.option('--name', '-n', default="", help='Name for output files. Files name will be:  "name_0", "name_2", "name_3" ... "name_[number_of_files]". Default is original files names.')
 
-def cli(dir, output, clean, name):
+def cli(dir, output, clean, name, subdirectorys, keepfolders):
 
     """Compile c/c++ codes on directory and generates .ll files with mem2reg option"""
 
@@ -17,8 +20,24 @@ def cli(dir, output, clean, name):
     
     if output == "":
         output = dir
-    
-    llscript(dir, output, clean, name, 1)
+
+    if subdirectorys:
+        # chama a função para percorrer todos os subdiretórios e salvar os caminhos em uma lista
+        subdirs = percorrer_subdiretorios(dir)
+
+        i = 1
+
+        # loop para executar o comando com cada subdiretório como argumento
+        for subdir in subdirs:
+            if keepfolders:
+                path_rel = os.path.relpath(subdir, dir)
+                aux_dir = os.path.join(output, path_rel)
+                i = 1
+            else:
+                aux_dir = output
+            i = llscript.llscript(subdir, aux_dir, clean, name, i)
+    else:
+        llscript(dir, output, clean, name, 1)
 
 
     
@@ -67,8 +86,6 @@ def llscript(dir, output, clean, name, n_start):
             i += 1
 
     return i
-
-
 
 if __name__ == '__main__':
     cli()
