@@ -4,9 +4,9 @@ import click
 from subdir import percorrer_subdiretorios
 
 @click.command()
-@click.option('--dir', '-d', default="", help='Path to root directory for .ll files search')
+@click.option('--dir', '-d', default="", help='Path to root directory for C/C++ files search')
 @click.option('--output', '-o', default="", help='Path to output directory.')
-@click.option('--subdirectorys', '-s', is_flag=True, default=False, help='Iterate all subdirectories and search for .ll files.')
+@click.option('--subdirectorys', '-s', is_flag=True, default=False, help='Iterate all subdirectories and search for C/C++ files.')
 @click.option('--keepfolders', '-k', is_flag=True, default=False, help='Keep folders structure in output directory if --subdirectorys is True.')
 @click.option('--clean', '-c', is_flag=True, default=True, help='Remove temporary .ll files.')
 @click.option('--name', '-n', default="", help='Name for output files. Files name will be:  "name_0", "name_2", "name_3" ... "name_[number_of_files]". Default is original files names.')
@@ -35,7 +35,7 @@ def cli(dir, output, clean, name, subdirectorys, keepfolders):
                 i = 1
             else:
                 aux_dir = output
-            i = llscript.llscript(subdir, aux_dir, clean, name, i)
+            i = llscript(subdir, aux_dir, clean, name, i)
     else:
         llscript(dir, output, clean, name, 1)
 
