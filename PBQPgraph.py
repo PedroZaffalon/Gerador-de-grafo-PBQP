@@ -9,6 +9,9 @@ class PBQPGraph:
         self.nodes[node_id] = {"array" : array, "type" : vType, "uses" : uses}
         
     def add_edge(self, node_id1, node_id2, matrix):
+        for edge in self.edges:
+            if (edge[0] == node_id1 and edge[1] == node_id2) or (edge[0] == node_id2 and edge[1] == node_id1):
+                return
         self.edges.append((node_id1, node_id2, matrix))
     
     def create_cost_array(regCost, spillCost):
