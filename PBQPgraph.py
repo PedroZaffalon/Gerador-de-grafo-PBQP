@@ -47,7 +47,7 @@ class PBQPGraph:
             jsonString += '\t' * (identLevel + 3) + "\"type\" : \"{}\",\n".format(self.nodes[node_name]["type"])
             jsonString += '\t' * (identLevel + 3) + "\"deepness of uses\" : {}".format(json.dumps(self.nodes[node_name]["uses"]))
             if flagArray:
-                jsonString += ",\n" + '\t' * (identLevel + 3) + "\"array\" : {}\n".format(str(self.nodes[node_name]["array"]))
+                jsonString += ",\n" + '\t' * (identLevel + 3) + "\"cost array\" : {}\n".format(str(self.nodes[node_name]["array"]))
             else:
                 jsonString += "\n"
             jsonString += '\t' * (identLevel + 2) + "}"
