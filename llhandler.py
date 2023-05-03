@@ -60,7 +60,7 @@ class LLHandler:
     def analyze_registers(function_code):
         # Inicializar o dicionário de registradores vazio
         registers = {}
-        profundidade = 1
+        profundidade = 0
 
         # Percorrer todas as linhas de código da função
         for i in range(len(function_code)):
