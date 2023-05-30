@@ -50,8 +50,7 @@ def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolder
             else:
                 aux_dir = output
             searchdir(subdir, aux_dir, func, costArray, array, matrix)
-    else:
-        searchdir(dir, output, func, costArray, array, matrix)
+    searchdir(dir, output, func, costArray, array, matrix)
     
 
 def searchdir(dir, output, costfunc, costArray, array, matrix):
@@ -75,8 +74,9 @@ def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc):
         function_code = functions[function_name]
         vRegisters = LLHandler.analyze_registers(function_code)
         graph = LLHandler.create_graph(vRegisters, costArray, costfunc)
-        print(function_name + " : " + str(len(graph.nodes)) + " nodes and " + str(len(graph.edges)) + " edges\n")
-        graphs[function_name] = graph
+        if len(graph.edges) > 0:
+            print(function_name + " : " + str(len(graph.nodes)) + " nodes and " + str(len(graph.edges)) + " edges\n")
+            graphs[function_name] = graph
 
     with open(outputfile, "w") as f:
         f.write("{\n")
