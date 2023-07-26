@@ -3,6 +3,7 @@ import click
 import os
 import json
 import importlib
+import shutil
 from subdir import percorrer_subdiretorios
 
 @click.command()
@@ -14,8 +15,9 @@ from subdir import percorrer_subdiretorios
 @click.option('--regcost', '-r', default="", help='Path to .json file with the registers cost array.')
 @click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
+@click.option('--clear', '-c', is_flag=True, default=False, help='Remove files in output directory.')
 
-def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders):
+def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders, clear):
 
     """Generate .json files with PBQP interference graphs from .ll files with mem2reg option"""
     
@@ -24,6 +26,20 @@ def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolder
     
     if output == "":
         output = dir
+        clear = False
+
+    if clear:
+        if os.path.exists(output):
+        # Percorre todos os arquivos e pastas dentro do diretório
+            for item in os.listdir(output):
+                item_path = os.path.join(output, item)
+
+                # Verifica se é um arquivo
+                if os.path.isfile(item_path):
+                    os.remove(item_path)
+                # Verifica se é uma pasta
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
 
     if costfunc == "" or not os.path.isfile(costfunc):
         func = None
