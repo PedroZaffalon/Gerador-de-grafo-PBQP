@@ -16,8 +16,9 @@ from subdir import percorrer_subdiretorios
 @click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
 @click.option('--clear', '-c', is_flag=True, default=False, help='Remove files in output directory.')
+@click.option('--onlyfunction', '-of', is_flag=True, default=False, help='Save each function in a separeted file.')
 
-def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders, clear):
+def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders, clear, onlyfunction):
 
     """Generate .json files with PBQP interference graphs from .ll files with mem2reg option"""
     
@@ -65,23 +66,22 @@ def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolder
                 aux_dir = os.path.join(output, path_rel)
             else:
                 aux_dir = output
-            searchdir(subdir, aux_dir, func, costArray, array, matrix)
-    searchdir(dir, output, func, costArray, array, matrix)
+            searchdir(subdir, aux_dir, func, costArray, array, matrix, onlyfunction)
+    searchdir(dir, output, func, costArray, array, matrix, onlyfunction)
     
 
-def searchdir(dir, output, costfunc, costArray, array, matrix):
+def searchdir(dir, output, costfunc, costArray, array, matrix, onlyfunction):
     if not os.path.exists(output):
         os.makedirs(output)
     
     for file_name in os.listdir(dir):
         if file_name.endswith(".ll"):
-            aux = file_name[:-3] + ".json"
             input_file_name = os.path.join(dir, file_name)
-            output_file_name = os.path.join(output, aux)
-            ir2graphs(input_file_name, output_file_name, costArray, array, matrix, costfunc)
+            output_file_name = os.path.join(output, file_name[:-3])
+            ir2graphs(input_file_name, output_file_name, costArray, array, matrix, costfunc, onlyfunction)
 
 
-def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc):
+def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc, onlyfunction):
 
     graphs = {}
     file = open(inputfile, "r")
@@ -94,17 +94,26 @@ def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc):
             print(function_name + " : " + str(len(graph.nodes)) + " nodes and " + str(len(graph.edges)) + " edges\n")
             graphs[function_name] = graph
 
-    with open(outputfile, "w") as f:
-        f.write("{\n")
-        flag = False
+    if onlyfunction:
+        i = 1
         for function_name in graphs:
-            if flag:
-                f.write(",\n")
-            else:
-                flag = True
-            f.write("\t\"" + function_name + "\" : ")
-            f.write(graphs[function_name].as_json(arrayflag, edgeflag, 1)) 
-        f.write('\n}')
+            filename = outputfile + "_" + str(i) + ".json"
+            with open(filename, "w") as f:
+                f.write(graphs[function_name].as_json(arrayflag, edgeflag, 0))
+            i += 1
+    else:
+        outputfile = outputfile + ".json"
+        with open(outputfile, "w") as f:
+            f.write("{\n")
+            flag = False
+            for function_name in graphs:
+                if flag:
+                    f.write(",\n")
+                else:
+                    flag = True
+                f.write("\t\"" + function_name + "\" : ")
+                f.write(graphs[function_name].as_json(arrayflag, edgeflag, 1)) 
+            f.write('\n}')
 
 if __name__ == '__main__':
     cli()

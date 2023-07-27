@@ -30,3 +30,4 @@
 - `--array/ -a` - Display cost array of nodes on .json file.
 - `--matrix/ -m` - Display cost matrix of edges on .json file.
 - `--clear/ -c` - Remove files in output directory.
+- `--onlyfunction/ -of` - Save each function in a separeted file.
