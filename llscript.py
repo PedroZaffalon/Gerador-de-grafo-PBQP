@@ -8,10 +8,10 @@ from subdir import percorrer_subdiretorios
 @click.option('--output', '-o', default="", help='Path to output directory.')
 @click.option('--subdirectorys', '-s', is_flag=True, default=False, help='Iterate all subdirectories and search for C/C++ files.')
 @click.option('--keepfolders', '-k', is_flag=True, default=False, help='Keep folders structure in output directory if --subdirectorys is True.')
-@click.option('--clean', '-c', is_flag=True, default=True, help='Remove temporary .ll files.')
+@click.option('--temporary', '-t', is_flag=True, default=False, help='Do not remove temporary .ll files.')
 @click.option('--name', '-n', default="", help='Name for output files. Files name will be:  "name_0", "name_2", "name_3" ... "name_[number_of_files]". Default is original files names.')
 
-def cli(dir, output, clean, name, subdirectorys, keepfolders):
+def cli(dir, output, temporary, name, subdirectorys, keepfolders):
 
     """Compile c/c++ codes on directory and generates .ll files with mem2reg option"""
 
@@ -35,13 +35,13 @@ def cli(dir, output, clean, name, subdirectorys, keepfolders):
                 i = 1
             else:
                 aux_dir = output
-            i = llscript(subdir, aux_dir, clean, name, i)
+            i = llscript(subdir, aux_dir, temporary, name, i)
     else:
-        llscript(dir, output, clean, name, 1)
+        llscript(dir, output, temporary, name, 1)
 
 
     
-def llscript(dir, output, clean, name, n_start):
+def llscript(dir, output, temporary, name, n_start):
     # Primeiro, definimos a linha de comando que será executada para cada arquivo .c
     c_command = "clang -Xclang -disable-O0-optnone -S -emit-llvm {} -o {}.ll"
 
@@ -81,7 +81,7 @@ def llscript(dir, output, clean, name, n_start):
             output_file_name = os.path.join(output, aux_name)
             command = ll_command.format(input_file_name, output_file_name)
             subprocess.run(command, shell=True)
-            if clean:
+            if not temporary:
                 os.remove(input_file_name + ".ll")
             i += 1
 
