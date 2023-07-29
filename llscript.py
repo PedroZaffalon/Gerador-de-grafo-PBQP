@@ -36,8 +36,8 @@ def cli(dir, output, temporary, name, subdirectorys, keepfolders):
             else:
                 aux_dir = output
             i = llscript(subdir, aux_dir, temporary, name, i)
-    else:
-        llscript(dir, output, temporary, name, 1)
+    
+    llscript(dir, output, temporary, name, 1)
 
 
     
@@ -81,7 +81,7 @@ def llscript(dir, output, temporary, name, n_start):
             output_file_name = os.path.join(output, aux_name)
             command = ll_command.format(input_file_name, output_file_name)
             subprocess.run(command, shell=True)
-            if not temporary:
+            if not temporary and output != dir:
                 os.remove(input_file_name + ".ll")
             i += 1
 
