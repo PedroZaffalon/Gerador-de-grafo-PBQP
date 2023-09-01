@@ -98,10 +98,10 @@ class LLHandler:
                 if register in registers:
                     # Atualizar a linha de última utilização e a quantidade de utilizações do registrador
                     registers[register][1] = i
-                    registers[register][3].append(profundidade)
+                    registers[register][3][i] = profundidade
                 else:
                     # Criar uma nova entrada para o registrador
-                    registers[register] = [i, i, "", [profundidade]]
+                    registers[register] = [i, i, "", {profundidade}]
             
             for register_name in rType:
                 try:
