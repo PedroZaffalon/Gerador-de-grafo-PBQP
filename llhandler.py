@@ -98,10 +98,11 @@ class LLHandler:
                 if register in registers:
                     # Atualizar a linha de última utilização e a quantidade de utilizações do registrador
                     registers[register][1] = i
-                    registers[register][3][i] = profundidade
+                    registers[register][3].append(i + 1)
+                    registers[register][4].append(profundidade)
                 else:
                     # Criar uma nova entrada para o registrador
-                    registers[register] = [i, i, "", {profundidade}]
+                    registers[register] = [i, i, "",[i + 1], [profundidade]]
             
             for register_name in rType:
                 try:
@@ -122,7 +123,7 @@ class LLHandler:
                 aux = costFunc(node[2], node[3])
                 spillCostLen = len(aux)
             array = PBQPGraph.create_cost_array(regCostArray, aux)
-            graph.add_node(rName, array, node[2], node[3])
+            graph.add_node(rName, array, node[2], node[3], node[4])
         for rName1 in vRegisters:
             for rName2 in vRegisters:
                 if rName1 != rName2:

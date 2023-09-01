@@ -5,8 +5,8 @@ class PBQPGraph:
         self.nodes = {}  # dicionário de nós (chave = ID do nó, valor = nó)
         self.edges = []  # lista de arestas
         
-    def add_node(self, node_id, array, vType, uses):
-        self.nodes[node_id] = {"array" : array, "type" : vType, "uses" : uses}
+    def add_node(self, node_id, array, vType, uses, deepness):
+        self.nodes[node_id] = {"array" : array, "type" : vType, "uses" : uses, "deepness" : deepness}
         
     def add_edge(self, node_id1, node_id2, matrix):
         for edge in self.edges:
@@ -45,7 +45,8 @@ class PBQPGraph:
                 commaFlag = True
             jsonString += '\t' * (identLevel + 2) + "\"{}\" : {}\n".format(node_name,'{')
             jsonString += '\t' * (identLevel + 3) + "\"type\" : \"{}\",\n".format(self.nodes[node_name]["type"])
-            jsonString += '\t' * (identLevel + 3) + "\"uses\" : {}".format(json.dumps(self.nodes[node_name]["uses"]))
+            jsonString += '\t' * (identLevel + 3) + "\"uses\" : {},".format(json.dumps(self.nodes[node_name]["uses"]))
+            jsonString += '\t' * (identLevel + 3) + "\"deepness of uses\" : {}".format(json.dumps(self.nodes[node_name]["deepness"]))
             if flagArray:
                 jsonString += ",\n" + '\t' * (identLevel + 3) + "\"cost array\" : {}\n".format(str(self.nodes[node_name]["array"]))
             else:
