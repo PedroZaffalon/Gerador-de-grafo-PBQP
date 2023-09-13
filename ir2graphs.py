@@ -101,7 +101,7 @@ def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc, o
             with open(filename, "w") as f:
                 f.write(graphs[function_name].as_json(arrayflag, edgeflag, 0))
             i += 1
-    else:
+    elif len(graphs) > 0:
         outputfile = outputfile + ".json"
         with open(outputfile, "w") as f:
             f.write("{\n")
