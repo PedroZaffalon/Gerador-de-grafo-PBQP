@@ -16,11 +16,13 @@ from subdir import percorrer_subdiretorios
 @click.option('--regcost', '-r', default="", help='Path to .json file with the registers cost array.')
 @click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
+@click.option('--minvertices', '-mv', default=1, help='Filter graphs with less than n vertices.')
+@click.option('--minedges', '-me', default=1, help='Filter graphs with less than n edges.')
 @click.option('--clear', '-c', is_flag=True, default=False, help='Remove files in output directory.')
 @click.option('--validatestrings', '-v', is_flag=True, default=False, help='Correct the strings in JSON graph files.')
 @click.option('--onlyfunction', '-of', is_flag=True, default=False, help='Save each function in a separeted file.')
 
-def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders, clear, validatestrings, onlyfunction):
+def cli(dir, output, costfunc, regcost, array, matrix, minvertices, minedges, subdirectorys, keepfolders, clear, validatestrings, onlyfunction):
 
     """Generate .json files with PBQP interference graphs from .ll files with mem2reg option"""
     
@@ -68,15 +70,15 @@ def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolder
                 aux_dir = os.path.join(output, path_rel)
             else:
                 aux_dir = output
-            searchdir(subdir, aux_dir, func, costArray, array, matrix, onlyfunction)
+            searchdir(subdir, aux_dir, func, costArray, array, matrix, onlyfunction, minvertices, minedges, clear)
             if validatestrings:
                 searchjson(subdir, False)
-    searchdir(dir, output, func, costArray, array, matrix, onlyfunction)
+    searchdir(dir, output, func, costArray, array, matrix, onlyfunction, minvertices, minedges, clear)
     if validatestrings:
         searchjson(dir, False)
     
 
-def searchdir(dir, output, costfunc, costArray, array, matrix, onlyfunction):
+def searchdir(dir, output, costfunc, costArray, array, matrix, onlyfunction, minvertices, minedges, clear):
     if not os.path.exists(output):
         os.makedirs(output)
     
@@ -85,10 +87,13 @@ def searchdir(dir, output, costfunc, costArray, array, matrix, onlyfunction):
             input_file_name = os.path.join(dir, file_name)
             output_file_name = os.path.join(output, file_name[:-3])
             print(file_name + ":\n")
-            ir2graphs(input_file_name, output_file_name, costArray, array, matrix, costfunc, onlyfunction)
+            ir2graphs(input_file_name, output_file_name, costArray, array, matrix, costfunc, onlyfunction, minvertices, minedges)
+    
+    if clear and len(os.listdir(output)) == 0:
+        shutil.rmtree(output)
 
 
-def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc, onlyfunction):
+def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc, onlyfunction, minvertices, minedges):
 
     graphs = {}
     file = open(inputfile, "r")
@@ -97,7 +102,7 @@ def ir2graphs(inputfile, outputfile, costArray, arrayflag, edgeflag, costfunc, o
         function_code = functions[function_name]
         vRegisters = LLHandler.analyze_registers(function_code)
         graph = LLHandler.create_graph(vRegisters, costArray, costfunc)
-        if len(graph.edges) > 0:
+        if len(graph.edges) > minedges and len(graph.nodes) > minvertices:
             print(function_name + " : " + str(len(graph.nodes)) + " nodes and " + str(len(graph.edges)) + " edges\n")
             graphs[function_name] = graph
 

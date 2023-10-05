@@ -29,6 +29,8 @@
 - `--regcost/ -r` - Path to .json file with the registers cost array.
 - `--array/ -a` - Display cost array of nodes on .json file.
 - `--matrix/ -m` - Display cost matrix of edges on .json file.
+- `--minvertices/ -mv` - Filter graphs with less than n vertices.
+- `--minedges/ -me` - Filter graphs with less than n edges.
 - `--clean/ -c` - Remove temporary .ll files.
 - `--validatestrings/ -v` - Correct the strings in JSON graph files.
 - `--onlyfunction/ -of` - Save each function in a separeted file.
