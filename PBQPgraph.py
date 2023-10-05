@@ -43,7 +43,6 @@ class PBQPGraph:
                 jsonString += ",\n"
             else:
                 commaFlag = True
-            node_name.replace("\"", "\\\"")
             jsonString += '\t' * (identLevel + 2) + "\"{}\" : {}\n".format(node_name,'{')
             jsonString += '\t' * (identLevel + 3) + "\"type\" : \"{}\",\n".format(self.nodes[node_name]["type"])
             jsonString += '\t' * (identLevel + 3) + "\"uses\" : {},\n".format(json.dumps(self.nodes[node_name]["uses"]))

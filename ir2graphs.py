@@ -4,6 +4,7 @@ import os
 import json
 import importlib
 import shutil
+from validateStrings import searchjson
 from subdir import percorrer_subdiretorios
 
 @click.command()
@@ -16,9 +17,10 @@ from subdir import percorrer_subdiretorios
 @click.option('--array', '-a', is_flag=True, default=False, help='Display cost array of nodes on .json file.')
 @click.option('--matrix', '-m', is_flag=True, default=False, help='Display cost matrix of edges on .json file.')
 @click.option('--clear', '-c', is_flag=True, default=False, help='Remove files in output directory.')
+@click.option('--validatestrings', '-v', is_flag=True, default=False, help='Correct the strings in JSON graph files.')
 @click.option('--onlyfunction', '-of', is_flag=True, default=False, help='Save each function in a separeted file.')
 
-def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders, clear, onlyfunction):
+def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolders, clear, validatestrings, onlyfunction):
 
     """Generate .json files with PBQP interference graphs from .ll files with mem2reg option"""
     
@@ -67,7 +69,11 @@ def cli(dir, output, costfunc, regcost, array, matrix, subdirectorys, keepfolder
             else:
                 aux_dir = output
             searchdir(subdir, aux_dir, func, costArray, array, matrix, onlyfunction)
+            if validatestrings:
+                searchjson(subdir, False)
     searchdir(dir, output, func, costArray, array, matrix, onlyfunction)
+    if validatestrings:
+        searchjson(dir, False)
     
 
 def searchdir(dir, output, costfunc, costArray, array, matrix, onlyfunction):
@@ -78,6 +84,7 @@ def searchdir(dir, output, costfunc, costArray, array, matrix, onlyfunction):
         if file_name.endswith(".ll"):
             input_file_name = os.path.join(dir, file_name)
             output_file_name = os.path.join(output, file_name[:-3])
+            print(file_name + ":\n")
             ir2graphs(input_file_name, output_file_name, costArray, array, matrix, costfunc, onlyfunction)
 
 

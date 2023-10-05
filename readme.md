@@ -12,12 +12,12 @@
 - `--output/ -o` - Path to output directory.
 - `--subdirectorys/ -s` - Iterate all subdirectories and search for C/C++ files.
 - `--keepfolders/ -k` - Keep folders structure in output directory if `--subdirectorys` is True.
-- `--clean/ -c` - Remove temporary .ll files.
+- `--temporary/ -t` - Do not remove files in output directory.
 - `--name/ -n'` - Name for output files. Files name will be:  "name_0", "name_2", "name_3", ... "name_\[number_of_files\]". Default is original files names.
 
 ---
 
-`ir2graphs.py.py`:
+`ir2graphs.py`:
 - Generate .json files with PBQP interference graphs from .ll files with mem2reg option
 
 ##### Flags
@@ -29,5 +29,6 @@
 - `--regcost/ -r` - Path to .json file with the registers cost array.
 - `--array/ -a` - Display cost array of nodes on .json file.
 - `--matrix/ -m` - Display cost matrix of edges on .json file.
-- `--temporary/ -t` - Do not remove files in output directory.
+- `--clean/ -c` - Remove temporary .ll files.
+- `--validatestrings/ -v` - Correct the strings in JSON graph files.
 - `--onlyfunction/ -of` - Save each function in a separeted file.
