@@ -102,7 +102,7 @@ class LLHandler:
                     registers[register][4].append(profundidade)
                 else:
                     # Criar uma nova entrada para o registrador
-                    registers[register] = [i, i, "",[i + 1], [profundidade]]
+                    registers[register] = [i, i, "unidentified",[i + 1], [profundidade]]
             
             for register_name in rType:
                 try:
