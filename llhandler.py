@@ -15,12 +15,12 @@ class LLHandler:
         "i16*" : "ptr",
         "i32*" : "ptr",
         "i64*" : "ptr",
-        "float*" : "float*",
-        "double*" : "double*",
+        "float*" : "ptr",
+        "double*" : "ptr",
         "icmp" : "i8",
         "inbounds" : "ptr",
         "alloca" : "ptr",
-        "label" : "label"
+        "label" : "ptr"
     }
 
     regStarts = ["%0", "%1", "%2", "%3", "%4", "%5", "%6", "%7", "%8", "%9", "%."]
